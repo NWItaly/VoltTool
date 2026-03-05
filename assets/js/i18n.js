@@ -10,6 +10,7 @@ const STRINGS = {
     navAnnualCost: 'Guidare in elettrico: costo annuale',
     navBreakeven: 'Viaggio: EV o termica?',
     navCharging: 'Ricarica: tempo ed energia',
+    navPrivacy: 'Informativa sulla privacy',
 
     /* guide */
     guideFree: '<strong>Confronto diretto:</strong> imposta entrambi i prezzi reali che paghi e scopri quale motorizzazione conviene di più.',
@@ -98,6 +99,7 @@ const STRINGS = {
     navAnnualCost: 'Driving electric: annual cost',
     navBreakeven: 'Trip: EV or ICE?',
     navCharging: 'Charging: time and energy',
+    navPrivacy: 'Privacy policy',
 
     /* guide */
     guideFree: '<strong>Direct comparison:</strong> set both real prices you pay and see which option saves you more money.',

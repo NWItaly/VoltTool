@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoltTool — Privacy</title>
+  <meta name="description"
+    content="Informativa sulla privacy per VoltTool: nessun tracciamento, nessun cookie di profilazione, nessun salvataggio di dati personali su server remoti.">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <style>
+    /* ── layout pagina statica ── */
+    .privacy-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .privacy-hero {
+      margin-bottom: 40px;
+    }
+
+    .privacy-hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--text);
+      margin: 0 0 8px;
+    }
+
+    .privacy-hero .privacy-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* badge di riepilogo */
+    .privacy-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .priv-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .priv-badge.ok {
+      border-color: rgba(79, 195, 247, .35);
+      background: rgba(79, 195, 247, .06);
+      color: var(--elec);
+    }
+
+    /* sezioni */
+    .priv-section {
+      margin-bottom: 32px;
+      padding: 24px;
+      border-radius: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+    }
+
+    .priv-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .priv-section p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0 0 10px;
+    }
+
+    .priv-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .priv-section a {
+      color: var(--elec);
+      text-decoration: none;
+    }
+
+    .priv-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* nota localStorage */
+    .priv-note {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 3px solid var(--elec);
+      background: rgba(79, 195, 247, .05);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* avviso */
+    .priv-warn {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 3px solid #f6ad55;
+      background: rgba(246, 173, 85, .05);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* footer privacy */
+    .privacy-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Nav iniettata da nav.js -->
+
+  <div id="content-it" class="privacy-wrap">
+
+    <!-- HERO -->
+    <div class="privacy-hero">
+      <h1>🔒 Informativa sulla privacy</h1>
+      <div class="privacy-date">Ultimo aggiornamento: marzo 2026</div>
+    </div>
+
+    <!-- BADGE RIEPILOGO -->
+    <div class="privacy-badges">
+      <span class="priv-badge ok">✓ Nessun cookie di profilazione</span>
+      <span class="priv-badge ok">✓ Nessun tracciamento</span>
+      <span class="priv-badge ok">✓ Calcoli solo in locale</span>
+      <span class="priv-badge ok">✓ Nessun account richiesto</span>
+      <span class="priv-badge ok">✓ Open source</span>
+    </div>
+
+    <div class="priv-section">
+      <h2>👤 Titolare e contatti</h2>
+      <p>VoltTool è un progetto open source dedicato a piccoli strumenti per la vita in elettrico,
+        pubblicato su GitHub all'indirizzo:
+        <a href="https://nwitaly.github.io/VoltTool/" target="_blank"
+          rel="noopener noreferrer">nwitaly.github.io/VoltTool</a>.
+      </p>
+      <p>Il titolare del trattamento è <strong>nwitaly</strong>, maintainer del repository GitHub.
+        Per qualsiasi richiesta o segnalazione relativa alla privacy puoi aprire una issue o
+        utilizzare i contatti indicati direttamente nel repository.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>📋 Dati personali trattati</h2>
+      <p>VoltTool non richiede registrazione, non prevede aree riservate e non utilizza moduli
+        di contatto, newsletter o sistemi di login.</p>
+      <p>Non vengono raccolti, inviati o memorizzati deliberatamente dati personali degli utenti
+        (nome, cognome, indirizzo email, ecc.) tramite questo sito.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>💾 Salvataggio locale (localStorage)</h2>
+      <p>Gli strumenti di VoltTool salvano le preferenze e i valori degli slider nel
+        <strong>localStorage</strong> del browser, esclusivamente per ripristinare lo stato
+        dell'interfaccia alla visita successiva.
+      </p>
+      <p>Questi dati non lasciano mai il dispositivo dell'utente: non vengono trasmessi
+        a nessun server remoto né letti da terze parti. Il localStorage non è un cookie
+        e non viene inviato nelle richieste HTTP.</p>
+      <div class="priv-note">
+        💡 Per cancellare questi dati è sufficiente svuotare la cache/storage del browser
+        per questo sito, oppure utilizzare la modalità di navigazione privata.
+      </div>
+    </div>
+
+    <div class="priv-section">
+      <h2>🖥 Log tecnici e hosting</h2>
+      <p>Il sito è ospitato tramite <strong>GitHub Pages</strong>. I log tecnici generati
+        dall'infrastruttura di hosting (indirizzo IP, user agent, richieste HTTP) sono gestiti
+        direttamente da GitHub secondo le proprie policy.</p>
+      <p>Per maggiori dettagli consulta l'
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          target="_blank" rel="noopener noreferrer">informativa sulla privacy di GitHub</a>.
+      </p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🍪 Cookie e strumenti di tracciamento</h2>
+      <p>Questo sito non utilizza cookie di profilazione e non impiega strumenti di analisi
+        comportamentale o marketing (Google Analytics, Facebook Pixel e simili).</p>
+      <p>Non vengono impiegati cookie di terze parti. L'unico storage utilizzato è il
+        localStorage descritto nella sezione precedente, strettamente necessario al
+        funzionamento dell'interfaccia.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🌐 Risorse esterne</h2>
+      <p>I font tipografici utilizzati dal sito (DM Mono, Syne) sono forniti
+        <strong>localmente</strong> (self-hosted) e la libreria grafica Chart.js è inclusa
+        direttamente nel repository. Non vengono effettuate chiamate a CDN o API esterne
+        per il caricamento di questi asset.
+      </p>
+      <p>La consultazione delle pagine non comporta pertanto la trasmissione dell'indirizzo IP
+        dell'utente a servizi di terze parti per il semplice funzionamento dell'interfaccia.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🔧 Dati inseriti negli strumenti</h2>
+      <p>Tutti i calcoli di VoltTool avvengono <strong>esclusivamente nel browser</strong>.
+        I valori inseriti (consumi, prezzi, km annui, ecc.) non vengono mai inviati
+        a server remoti né memorizzati dal titolare del sito.</p>
+      <p>L'utente può cancellare i dati in qualsiasi momento svuotando il localStorage
+        dal browser o semplicemente utilizzando la navigazione privata.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>⚖️ Diritti dell'interessato (GDPR)</h2>
+      <p>Poiché il sito non raccoglie né conserva dati personali tramite proprie funzionalità,
+        l'esercizio dei diritti previsti dagli artt. 15–22 GDPR (accesso, rettifica, cancellazione,
+        opposizione, portabilità) riguarderà principalmente i log tecnici gestiti da GitHub Pages.</p>
+      <p>Per richieste relative ai log di hosting fai riferimento alla
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          target="_blank" rel="noopener noreferrer">privacy policy di GitHub</a>.
+        Per qualsiasi altra richiesta puoi contattare il maintainer tramite il repository.
+      </p>
+    </div>
+
+    <div class="priv-section">
+      <h2>📅 Aggiornamenti a questa informativa</h2>
+      <p>Questa informativa può essere soggetta a modifiche per adeguamenti normativi o tecnici.
+        La data di "ultimo aggiornamento" in cima alla pagina indica sempre la versione corrente.
+        Le modifiche sostanziali saranno segnalate nel changelog del repository.</p>
+    </div>
+
+    <div class="privacy-footer">
+      VoltTool — progetto open source su GitHub &nbsp;·&nbsp;
+      <a href="https://nwitaly.github.io/VoltTool/" style="color:var(--elec)">nwitaly.github.io/VoltTool</a>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════ ENGLISH ═══════════════════════ -->
+
+  <div id="content-en" class="privacy-wrap" style="display:none">
+
+    <!-- HERO -->
+    <div class="privacy-hero">
+      <h1>🔒 Privacy Policy</h1>
+      <div class="privacy-date">Last updated: March 2026</div>
+    </div>
+
+    <!-- BADGE SUMMARY -->
+    <div class="privacy-badges">
+      <span class="priv-badge ok">✓ No profiling cookies</span>
+      <span class="priv-badge ok">✓ No tracking</span>
+      <span class="priv-badge ok">✓ All calculations local</span>
+      <span class="priv-badge ok">✓ No account required</span>
+      <span class="priv-badge ok">✓ Open source</span>
+    </div>
+
+    <div class="priv-section">
+      <h2>👤 Data controller &amp; contact</h2>
+      <p>VoltTool is an open source project providing small tools for everyday EV life,
+        published on GitHub at:
+        <a href="https://nwitaly.github.io/VoltTool/" target="_blank"
+          rel="noopener noreferrer">nwitaly.github.io/VoltTool</a>.
+      </p>
+      <p>The data controller is <strong>nwitaly</strong>, maintainer of the GitHub repository.
+        For any privacy-related request or report you can open an issue or use the contact
+        details provided directly in the repository.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>📋 Personal data processed</h2>
+      <p>VoltTool requires no registration, has no restricted areas, and does not use contact
+        forms, newsletters, or login systems.</p>
+      <p>No personal data (name, surname, email address, etc.) is deliberately collected,
+        transmitted, or stored by this site.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>💾 Local storage (localStorage)</h2>
+      <p>VoltTool's tools save slider preferences and values in the browser's
+        <strong>localStorage</strong>, solely to restore the interface state on subsequent visits.
+      </p>
+      <p>This data never leaves your device: it is never transmitted to any remote server or
+        read by third parties. localStorage is not a cookie and is not sent in HTTP requests.</p>
+      <div class="priv-note">
+        💡 To delete this data, simply clear the browser storage for this site,
+        or use private/incognito browsing mode.
+      </div>
+    </div>
+
+    <div class="priv-section">
+      <h2>🖥 Technical logs &amp; hosting</h2>
+      <p>The site is hosted via <strong>GitHub Pages</strong>. Technical logs generated by the
+        hosting infrastructure (IP address, user agent, HTTP requests) are managed directly
+        by GitHub under their own policy.</p>
+      <p>For more details please refer to
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          target="_blank" rel="noopener noreferrer">GitHub's Privacy Statement</a>.
+      </p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🍪 Cookies &amp; tracking</h2>
+      <p>This site does not use profiling cookies and does not employ behavioural analytics
+        or marketing tools (Google Analytics, Facebook Pixel, or similar).</p>
+      <p>No third-party cookies are used. The only storage in use is the localStorage
+        described in the previous section, strictly necessary for the interface to function.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🌐 External resources</h2>
+      <p>The typefaces used by the site (DM Mono, Syne) are served <strong>locally</strong>
+        (self-hosted) and the Chart.js graphics library is bundled directly in the repository.
+        No calls are made to external CDNs or APIs to load these assets.</p>
+      <p>Browsing the site therefore does not result in the user's IP address being transmitted
+        to any third-party service merely for the interface to work.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>🔧 Data entered in the tools</h2>
+      <p>All VoltTool calculations run <strong>exclusively in the browser</strong>.
+        Values entered (consumption figures, prices, annual km, etc.) are never sent to remote
+        servers or stored by the site owner.</p>
+      <p>You can delete this data at any time by clearing the browser localStorage for this site,
+        or by using private browsing mode.</p>
+    </div>
+
+    <div class="priv-section">
+      <h2>⚖️ Your rights (GDPR)</h2>
+      <p>Because the site does not collect or store personal data through its own features,
+        the exercise of rights under Arts. 15–22 GDPR (access, rectification, erasure,
+        objection, portability) will primarily concern the technical logs managed by GitHub Pages.</p>
+      <p>For requests relating to hosting logs please refer to
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+          target="_blank" rel="noopener noreferrer">GitHub's Privacy Statement</a>.
+        For any other request you can contact the maintainer via the repository.
+      </p>
+    </div>
+
+    <div class="priv-section">
+      <h2>📅 Updates to this policy</h2>
+      <p>This policy may be updated to reflect regulatory or technical changes to the site.
+        The "last updated" date at the top of the page always reflects the current version.
+        Substantial changes will be noted in the repository changelog.</p>
+    </div>
+
+    <div class="privacy-footer">
+      VoltTool — open source project on GitHub &nbsp;·&nbsp;
+      <a href="https://nwitaly.github.io/VoltTool/" style="color:var(--elec)">nwitaly.github.io/VoltTool</a>
+    </div>
+
+  </div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script>
+    // Mostra il blocco nella lingua corrente; fallback a IT
+    if (lang === 'en') {
+      document.getElementById('content-it').style.display = 'none';
+      document.getElementById('content-en').style.display = '';
+      document.title = 'VoltTool — Privacy Policy';
+      document.documentElement.lang = 'en';
+    } else {
+      document.title = 'VoltTool — Privacy';
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+/* DM Mono 400 */
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/dm-mono-v16-latin-regular.woff2') format('woff2');
+}
+
+/* DM Mono 500 */
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/dm-mono-v16-latin-500.woff2') format('woff2');
+}
+
+/* Syne 400 */
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/syne-v24-latin-regular.woff2') format('woff2');
+}
+
+/* Syne 600 */
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/syne-v24-latin-600.woff2') format('woff2');
+}
+
+/* Syne 800 */
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../fonts/syne-v24-latin-800.woff2') format('woff2');
+}

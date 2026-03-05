@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://nwitaly.github.io/VoltTool/sitemap.xml

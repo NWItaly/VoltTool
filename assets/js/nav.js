@@ -12,6 +12,7 @@
     { key: 'navAnnualCost', href: 'index.html', match: /index\.html$|^\/$|^$/ },
     { key: 'navBreakeven', href: 'breakeven.html', match: /breakeven\.html$/ },
     { key: 'navCharging', href: 'charging.html', match: /charging\.html$/ },
+    { key: 'navPrivacy', href: 'privacy.html', match: /privacy\.html$/ },
   ];
 
   /* ── 2. Rileva pagina corrente ──────────────────────────────── */
