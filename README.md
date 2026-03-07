@@ -8,7 +8,7 @@ Strumento web per rispondere rapidamente e semplicemente ai dubbi di chi ha un'a
 
 ## Funzionalità
 
-### `index.html` — Guidare in elettrico: costo annuale
+### `index.html` — Costo annuale
 Inserisci i tuoi dati reali e scopri subito quanto risparmi (o spendi in più) ogni anno scegliendo l'elettrico rispetto al carburante.
 
 - Km percorsi all'anno
@@ -18,7 +18,7 @@ Inserisci i tuoi dati reali e scopri subito quanto risparmi (o spendi in più) o
 - Consumo dell'auto elettrica (kWh/100km) con preset per tipo di percorso
 - Risultato in €/anno con dettaglio del costo al km per entrambe le motorizzazioni
 
-### `breakeven.html` — Viaggio: EV o termica?
+### `breakeven.html` — EV o termica?
 Dato il consumo delle due auto, calcola a quale prezzo dell'energia (o del carburante) le due opzioni diventano equivalenti. Utile per rispondere a *"conviene l'elettrico se la corrente la pago X?"*
 
 - Due modalità di calcolo:
@@ -27,7 +27,7 @@ Dato il consumo delle due auto, calcola a quale prezzo dell'energia (o del carbu
 - Grafico interattivo del costo al km in funzione del prezzo variabile
 - Punto di pareggio evidenziato sul grafico
 
-### `charging.html` — Ricarica: tempo ed energia?
+### `charging.html` — Tempo ed energia?
 Data la potenza di ricarica, calcola l'energia o il tempo necessario alla ricarica.
 
 - Due modalità di calcolo:
@@ -39,6 +39,15 @@ Data la potenza di ricarica, calcola l'energia o il tempo necessario alla ricari
   - Curva decresente → stima una curva di ricarica (solo DC)
   - Perdita di ricarica → stima una perdita di energia
 
+### `range.html` — Ansia da autonomia
+Data la capienza della batteria, calcola quanti km si possono percorrere.
+- Due modalità di calcolo:
+  - Consumo medio → calcola quanti km si fanno con il dato indicato
+  - Per tipo di percorso → calcola quanti km si possono fare nei 3 scenari classici
+- Grafico per evidenziare la differenza di autonomia in base al percorso
+- Funzionalità aggiuntive:
+  - Carica attuale e riserva → non sempre la batteria è sempre al 100% e la si vuole utilizzare interamente
+
 ---
 
 ## Struttura del progetto
@@ -47,9 +56,12 @@ Data la potenza di ricarica, calcola l'energia o il tempo necessario alla ricari
 ├── index.html        # Calcolatore risparmio annuale
 ├── breakeven.html    # Calcolatore punto di pareggio
 ├── charging.html     # Calcolatore per la ricarica
-├── shared.css        # Design system condiviso (variabili, componenti, nav)
-├── i18n.js           # Stringhe in italiano e inglese (rileva lingua dal browser)
-└── nav.js            # Menu di navigazione con hamburger per mobile
+├── range.html        # Calcolatore per i km disponibili
+├── privacy.html      # Policy privacy
+└── assets            # Risorse esterne alle pagine
+    ├── css           # Fogli di stile condivisi tra le pagine
+    ├── fonts         # Per questioni di privacy ho reso disponibili i fonts localmente
+    └── js            # nav + i18n + chart  
 ```
 
 ---
