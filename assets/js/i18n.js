@@ -7,9 +7,10 @@ const STRINGS = {
   it: {
 
     /* nav */
-    navAnnualCost: 'Guidare in elettrico: costo annuale',
-    navBreakeven: 'Viaggio: EV o termica?',
-    navCharging: 'Ricarica: tempo ed energia',
+    navAnnualCost: 'Costo annuale',
+    navBreakeven: 'EV o termica?',
+    navCharging: 'Tempo ed energia',
+    navRange: 'Ansia da autonomia',
     navPrivacy: 'Informativa sulla privacy',
 
     /* guide */
@@ -96,9 +97,10 @@ const STRINGS = {
   en: {
 
     /* nav */
-    navAnnualCost: 'Driving electric: annual cost',
-    navBreakeven: 'Trip: EV or ICE?',
-    navCharging: 'Charging: time and energy',
+    navAnnualCost: 'Annual cost',
+    navBreakeven: 'EV or ICE?',
+    navCharging: 'Time and energy',
+    navRange: 'Anxiety over range',
     navPrivacy: 'Privacy policy',
 
     /* guide */

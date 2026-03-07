@@ -12,6 +12,7 @@
     { key: 'navAnnualCost', href: 'index.html', match: /index\.html$|^\/$|^$/ },
     { key: 'navBreakeven', href: 'breakeven.html', match: /breakeven\.html$/ },
     { key: 'navCharging', href: 'charging.html', match: /charging\.html$/ },
+    { key: 'navRange', href: 'range.html', match: /range\.html$/ },
     { key: 'navPrivacy', href: 'privacy.html', match: /privacy\.html$/ },
   ];
 
