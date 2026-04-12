@@ -12,6 +12,7 @@ const STRINGS = {
     navCharging: 'Tempo ed energia',
     navRange: 'Ansia da autonomia',
     navBattery: 'Degrado',
+    navTrip: 'Viaggio EV',
     navPrivacy: 'Informativa sulla privacy',
 
     navShare:       'Condividi',      // it
@@ -106,6 +107,7 @@ const STRINGS = {
     navCharging: 'Time and energy',
     navRange: 'Anxiety over range',
     navBattery: 'Degrade',
+    navTrip: 'EV Trip',
     navPrivacy: 'Privacy policy',
 
     navShare:       'Share',          // en

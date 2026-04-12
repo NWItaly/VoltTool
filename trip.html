@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/shared.css">
+</head>
+
+<body>
+
+  <!-- Nav iniettata da nav.js -->
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h3 id="modal-title"></h3>
+      <p id="modal-desc"></p>
+      <input type="number" id="modal-input" step="any" />
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancel"></button>
+        <button class="btn btn-primary" id="btn-ok"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRESET — batteria -->
+  <div class="preset-popup" id="popup-battery">
+    <div class="preset-card" id="pc-bat-30"><span class="pc-icon">🛵</span><span class="pc-label"></span><span class="pc-value elec-color">30 kWh</span></div>
+    <div class="preset-card" id="pc-bat-50"><span class="pc-icon">🚗</span><span class="pc-label"></span><span class="pc-value elec-color">50 kWh</span></div>
+    <div class="preset-card" id="pc-bat-77"><span class="pc-icon">🚙</span><span class="pc-label"></span><span class="pc-value elec-color">77 kWh</span></div>
+    <div class="preset-card" id="pc-bat-100"><span class="pc-icon">🚀</span><span class="pc-label"></span><span class="pc-value elec-color">100 kWh</span></div>
+  </div>
+
+  <!-- PRESET — consumo -->
+  <div class="preset-popup" id="popup-kwh">
+    <div class="preset-card" id="pc-kwh-city"><span class="pc-icon">🏙️</span><span class="pc-label"></span><span class="pc-value elec-color">12 kWh/100</span></div>
+    <div class="preset-card" id="pc-kwh-extra"><span class="pc-icon">🛣️</span><span class="pc-label"></span><span class="pc-value elec-color">16 kWh/100</span></div>
+    <div class="preset-card" id="pc-kwh-auto"><span class="pc-icon">🛤️</span><span class="pc-label"></span><span class="pc-value elec-color">20 kWh/100</span></div>
+  </div>
+
+  <!-- PRESET — potenza ricarica -->
+  <div class="preset-popup" id="popup-kw">
+    <div class="preset-card" id="pc-kw-11"><span class="pc-icon">🔌</span><span class="pc-label"></span><span class="pc-value elec-color">11 kW</span></div>
+    <div class="preset-card" id="pc-kw-22"><span class="pc-icon">⚡</span><span class="pc-label"></span><span class="pc-value elec-color">22 kW</span></div>
+    <div class="preset-card" id="pc-kw-50"><span class="pc-icon">🔋</span><span class="pc-label"></span><span class="pc-value elec-color">50 kW</span></div>
+    <div class="preset-card" id="pc-kw-150"><span class="pc-icon">🚀</span><span class="pc-label"></span><span class="pc-value elec-color">150 kW</span></div>
+  </div>
+
+  <div class="app" id="app">
+
+    <!-- ══════════════ PANEL SINISTRO ══════════════ -->
+    <div class="panel">
+
+      <!-- Guida -->
+      <div class="guide-box elec-accent">
+        <p id="guide-text"></p>
+      </div>
+
+      <!-- Viaggio base -->
+      <div>
+        <div class="section-label" id="sec-viaggio-label"></div>
+        <div class="slider-group">
+
+          <div class="slider-item">
+            <div class="slider-header">
+              <span class="slider-name neutral-color"><span id="sl-label-km"></span></span>
+              <div class="slider-value-wrap">
+                <span class="slider-value" id="km-display">—</span>
+                <button class="edit-btn" onclick="openModal('km')">✏</button>
+              </div>
+            </div>
+            <input type="range" class="neutral" id="sl-km" min="50" max="1000" step="10" value="300">
+          </div>
+
+          <div class="slider-item">
+            <div class="slider-header">
+              <span class="slider-name elec-color">
+                <span id="sl-label-kwh"></span>
+                <div class="preset-wrapper">
+                  <button class="preset-btn" onclick="togglePopup('popup-kwh', this)">▾ preset</button>
+                </div>
+              </span>
+              <div class="slider-value-wrap">
+                <span class="slider-value" id="kwh-display">—</span>
+                <button class="edit-btn" onclick="openModal('kwh')">✏</button>
+              </div>
+            </div>
+            <input type="range" class="elec" id="sl-kwh" min="8" max="35" step="0.5" value="16">
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Result: kWh necessari -->
+      <div class="result-box range">
+        <div class="rb-label elec" id="rb-kwh-label"></div>
+        <div class="rb-main elec" id="rb-kwh-value">—</div>
+        <div class="rb-note" id="rb-kwh-note"></div>
+      </div>
+
+      <!-- Status ok/warning — solo se veicolo attivo -->
+      <div class="result-box" id="rb-status-box" style="display:none;">
+        <div class="rb-main" id="rb-status-text" style="font-size:.88rem;line-height:1.4;"></div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Opzioni avanzate -->
+      <div>
+        <div class="section-label" id="sec-options-label"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <!-- ── Stato veicolo ── -->
+          <div class="accordion-item">
+            <div class="check-item" id="chk-veicolo" onclick="toggleOption('veicolo')">
+              <span class="chk-box">✓</span>
+              <span id="chk-veicolo-label"></span>
+            </div>
+            <div class="acc-panel" id="panel-veicolo">
+              <div class="slider-group">
+
+                <div class="slider-item">
+                  <div class="slider-header">
+                    <span class="slider-name elec-color">
+                      <span id="sl-label-battery"></span>
+                      <div class="preset-wrapper">
+                        <button class="preset-btn" onclick="togglePopup('popup-battery', this)">▾ preset</button>
+                      </div>
+                    </span>
+                    <div class="slider-value-wrap">
+                      <span class="slider-value" id="battery-display">—</span>
+                      <button class="edit-btn" onclick="openModal('battery')">✏</button>
+                    </div>
+                  </div>
+                  <input type="range" class="elec" id="sl-battery" min="20" max="120" step="1" value="60">
+                </div>
+
+                <div class="slider-item">
+                  <div class="slider-header">
+                    <span class="slider-name elec-color"><span id="sl-label-soc-start"></span></span>
+                    <div class="slider-value-wrap">
+                      <span class="slider-value" id="soc-start-display">—</span>
+                      <button class="edit-btn" onclick="openModal('socStart')">✏</button>
+                    </div>
+                  </div>
+                  <input type="range" class="elec" id="sl-soc-start" min="10" max="100" step="5" value="80">
+                </div>
+
+                <div class="slider-item">
+                  <div class="slider-header">
+                    <span class="slider-name elec-color"><span id="sl-label-soc-target"></span></span>
+                    <div class="slider-value-wrap">
+                      <span class="slider-value" id="soc-target-display">—</span>
+                      <button class="edit-btn" onclick="openModal('socTarget')">✏</button>
+                    </div>
+                  </div>
+                  <input type="range" class="elec" id="sl-soc-target" min="50" max="100" step="5" value="80">
+                </div>
+
+                <div class="slider-item">
+                  <div class="slider-header">
+                    <span class="slider-name" style="color:#f87171;"><span id="sl-label-soc-end"></span></span>
+                    <div class="slider-value-wrap">
+                      <span class="slider-value" id="soc-end-display">—</span>
+                      <button class="edit-btn" onclick="openModal('socEnd')">✏</button>
+                    </div>
+                  </div>
+                  <input type="range" class="neutral" id="sl-soc-end" min="0" max="50" step="5" value="10">
+                </div>
+
+                <!-- Soste — visibile solo se necessarie, dentro stato veicolo -->
+                <div id="panel-soste-auto" style="display:none;">
+                  <hr style="border:none;border-top:1px solid var(--border);margin:4px 0;">
+                  <div class="slider-group" style="margin-top:4px;">
+
+                    <div class="slider-item">
+                      <div class="slider-header">
+                        <span class="slider-name elec-color">
+                          <span id="sl-label-chargekw"></span>
+                          <div class="preset-wrapper">
+                            <button class="preset-btn" onclick="togglePopup('popup-kw', this)">▾ preset</button>
+                          </div>
+                        </span>
+                        <div class="slider-value-wrap">
+                          <span class="slider-value" id="chargekw-display">—</span>
+                          <button class="edit-btn" onclick="openModal('chargeKw')">✏</button>
+                        </div>
+                      </div>
+                      <input type="range" class="elec" id="sl-chargekw" min="11" max="350" step="1" value="50">
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Costo ricarica ── -->
+          <div class="accordion-item">
+            <div class="check-item" id="chk-costo" onclick="toggleOption('costo')">
+              <span class="chk-box">✓</span>
+              <span id="chk-costo-label"></span>
+            </div>
+            <div class="acc-panel" id="panel-costo">
+              <div class="slider-group">
+                <div class="slider-item">
+                  <div class="slider-header">
+                    <span class="slider-name" style="color:var(--fuel);"><span id="sl-label-price"></span></span>
+                    <div class="slider-value-wrap">
+                      <span class="slider-value" id="price-display">—</span>
+                      <button class="edit-btn" onclick="openModal('price')">✏</button>
+                    </div>
+                  </div>
+                  <input type="range" class="fuel" id="sl-price" min="0.10" max="0.80" step="0.01" value="0.25">
+                </div>
+                <div class="result-box range">
+                  <div class="rb-label" style="color:var(--fuel);font-family:'DM Mono',monospace;font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;opacity:.75;margin-bottom:2px;" id="rb-cost-label"></div>
+                  <div class="rb-main" style="color:var(--fuel);font-family:'DM Mono',monospace;font-size:1.08rem;" id="rb-cost-value">—</div>
+                  <div class="rb-note" id="rb-cost-note"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════ PANEL DESTRO — mappa ══════════════ -->
+    <div class="chart-panel" id="trip-map-panel" style="min-height:500px;">
+      <div>
+        <div class="chart-title" id="map-title"></div>
+        <div class="chart-subtitle" id="map-subtitle"></div>
+      </div>
+      <div id="trip-map-container"
+           style="flex:1;overflow-y:auto;padding:8px 4px;">
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/i18n_trip.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script>
+
+    // ─── i18n statici ────────────────────────────────────────────
+    document.title                                               = tT.pageTitle;
+    document.getElementById('btn-ok').textContent               = tT.btnOk;
+    document.getElementById('btn-cancel').textContent           = tT.btnCancel;
+    document.getElementById('guide-text').innerHTML             = tT.guide;
+    document.getElementById('sec-viaggio-label').textContent    = tT.secViaggio;
+    document.getElementById('sec-options-label').textContent    = tT.secOptions;
+    document.getElementById('sl-label-km').textContent          = tT.slKm;
+    document.getElementById('sl-label-kwh').textContent         = tT.slKwh;
+    document.getElementById('sl-label-battery').textContent     = tT.slBattery;
+    document.getElementById('sl-label-soc-start').textContent   = tT.slSocStart;
+    document.getElementById('sl-label-soc-target').textContent  = tT.slSocTarget;
+    document.getElementById('sl-label-soc-end').textContent     = tT.slSocEnd;
+    document.getElementById('sl-label-chargekw').textContent    = tT.slChargeKw;
+    document.getElementById('sl-label-price').textContent       = tT.slPrice;
+    document.getElementById('chk-veicolo-label').textContent    = tT.chkVeicoloLabel;
+    document.getElementById('chk-costo-label').textContent      = tT.chkCostoLabel;
+    document.getElementById('rb-kwh-label').textContent         = tT.rbKwhLabel;
+    document.getElementById('rb-cost-label').textContent        = tT.rbCostLabel;
+    document.getElementById('map-title').textContent            = tT.mapTitle;
+
+    document.querySelector('#pc-bat-30  .pc-label').textContent = tT.presetBat30;
+    document.querySelector('#pc-bat-50  .pc-label').textContent = tT.presetBat50;
+    document.querySelector('#pc-bat-77  .pc-label').textContent = tT.presetBat77;
+    document.querySelector('#pc-bat-100 .pc-label').textContent = tT.presetBat100;
+    document.querySelector('#pc-kwh-city  .pc-label').textContent = t.presetKwhCity;
+    document.querySelector('#pc-kwh-extra .pc-label').textContent = t.presetKwhExtra;
+    document.querySelector('#pc-kwh-auto  .pc-label').textContent = t.presetKwhAuto;
+    document.querySelector('#pc-kw-11  .pc-label').textContent  = tT.presetKw11;
+    document.querySelector('#pc-kw-22  .pc-label').textContent  = tT.presetKw22;
+    document.querySelector('#pc-kw-50  .pc-label').textContent  = tT.presetKw50;
+    document.querySelector('#pc-kw-150 .pc-label').textContent  = tT.presetKw150;
+
+    // ─── Formatters ──────────────────────────────────────────────
+    const { p1: fmtP1, p2: fmtP2, int: fmtInt } = VT.fmt;
+
+    // ─── State ───────────────────────────────────────────────────
+    const STORAGE_KEY = 'volttool_trip_v1';
+    const defaults = {
+      km:          300,
+      kwh100:      16,
+      battery:     60,
+      socStart:    80,
+      socEnd:      10,
+      socTarget:   80,   // % massima di ricarica ad ogni sosta
+      kmPerTappa:  [],   // array di km per ogni tappa, indice = indice segmento
+      chargeKw:    50,
+      price:       0.25,
+      optVeicolo:  false,
+      optCosto:    false,
+    };
+
+    const state = VT.loadState(STORAGE_KEY, defaults);
+    VT.registerAppState(state, () => {
+      updateUI();
+      VT.saveState(STORAGE_KEY, state);
+    });
+
+    // ─── DOM refs ────────────────────────────────────────────────
+    const slKm       = document.getElementById('sl-km');
+    const slKwh      = document.getElementById('sl-kwh');
+    const slBattery   = document.getElementById('sl-battery');
+    const slSocStart  = document.getElementById('sl-soc-start');
+    const slSocTarget = document.getElementById('sl-soc-target');
+    const slSocEnd    = document.getElementById('sl-soc-end');
+    const slChargeKw  = document.getElementById('sl-chargekw');
+    const slPrice     = document.getElementById('sl-price');
+
+    // ─── Calcoli ─────────────────────────────────────────────────
+    function kwhNecessari() {
+      return (state.kwh100 / 100) * state.km;
+    }
+
+    function kwhDisponibili() {
+      return state.battery * Math.max(0, state.socStart - state.socEnd) / 100;
+    }
+
+    // km massimi percorribili da una % SOC fino a 0% (massimo fisico)
+    function kmMaxDaSoc(socInizio) {
+      const kwhDisp = state.battery * socInizio / 100;
+      return state.kwh100 > 0 ? Math.floor((kwhDisp / state.kwh100) * 100) : 500;
+    }
+
+    // km default per una tappa: 80% del massimo fisico, arrotondato a 10
+    function kmDefaultTappa(socInizio) {
+      return Math.max(10, Math.round(kmMaxDaSoc(socInizio) * 0.8 / 10) * 10);
+    }
+
+    // Calcola le tappe necessarie per completare il viaggio.
+    //
+    // LOGICA (ordine dei check per ogni segmento):
+    //   1. Con la carica attuale arrivo a destinazione senza soste? → segmento finale, fine.
+    //   2. Calcolo kmSeg per questa tappa (limite fisico, valore salvato dall'utente, km rimanenti).
+    //   3. Con la carica all'arrivo di questo segmento, ce la faccio a finire SENZA ricaricare?
+    //      → Questo segmento è l'ultimo (isUltimo), non serve sosta. Fine.
+    //   4. Sosta necessaria: calcolo il target di ricarica ottimale con look-ahead.
+    //      scegliBestPct() confronta diversi target (minimo, +5%, +10%... fino a socTarget)
+    //      scegliendo quello che minimizza il tempo totale di ricarica restante.
+    function calcolaTappe() {
+      const kwhPerKm = state.kwh100 / 100;
+
+      // Restituisce true se partendo con pctDisp% di batteria si riesce a percorrere
+      // kmDaPercorrere km arrivando con almeno socEnd% (soglia di riserva impostata dall'utente).
+      function celaFa(pctDisp, kmDaPercorrere) {
+        const kwhDisp = state.battery * pctDisp / 100;
+        const kwhNec  = kwhPerKm * kmDaPercorrere + state.battery * state.socEnd / 100;
+        return kwhDisp >= kwhNec;
+      }
+
+      // Versione non arrotondata — usata internamente da stimaMinutiTotali per evitare
+      // accumulo di errori di arrotondamento nelle simulazioni ricorsive.
+      function pctArrivoExact(pctInizio, kmDaPercorrere) {
+        return pctInizio - (kwhPerKm * kmDaPercorrere / state.battery * 100);
+      }
+
+      // Calcola la % di batteria rimasta dopo aver percorso kmDaPercorrere km
+      // partendo da pctInizio%. Arrotondato all'intero più vicino (usato per UI e tappe reali).
+      function pctArrivo(pctInizio, kmDaPercorrere) {
+        return Math.round(pctArrivoExact(pctInizio, kmDaPercorrere));
+      }
+
+      // ── Conta le soste future necessarie partendo da (pctPart, kmRim) ──
+      //
+      // Simula il viaggio in avanti usando la stessa logica di ricarica ottimale
+      // ricorsivamente: ad ogni sosta simulata carica fino a socTarget
+      // (worst case utile per confronto), poi conta quante soste restano.
+      //
+      // NOTA: la metrica che ottimizziamo è il NUMERO DI SOSTE, non i minuti.
+      // Ridurre le soste è sempre preferibile a ridurre i minuti di una singola sosta,
+      // perché ogni sosta ha un overhead fisso (uscita autostrada, spostamento, attesa).
+      // A parità di soste, preferiamo il target di ricarica più basso (meno tempo qui).
+      //
+      // depth: limite anti-loop (10 è più che sufficiente per qualsiasi viaggio reale)
+      function contaSosteFuture(pctPart, kmRim, depth) {
+        if (depth <= 0 || kmRim <= 0) return 0;
+        if (celaFa(pctPart, kmRim)) return 0;
+
+        const maxKmSim = kmMaxDaSoc(pctPart);
+        const kmSegSim = Math.min(kmDefaultTappa(pctPart), maxKmSim, kmRim);
+        if (kmSegSim <= 0) return 0;
+
+        const pctFineSim = pctArrivoExact(pctPart, kmSegSim);
+        const kmDopoSim  = kmRim - kmSegSim;
+
+        if (kmDopoSim <= 0 || celaFa(pctFineSim, kmDopoSim)) return 0;
+
+        // Sosta necessaria: ricarica a socTarget (upper bound, massimizza il look-ahead)
+        // e conta questa sosta + le successive
+        return 1 + contaSosteFuture(state.socTarget, kmDopoSim, depth - 1);
+      }
+
+      // ── Sceglie il target % di ricarica ottimale per una sosta ───
+      //
+      // Per ogni candidato (da pctMin a socTarget, passi di 5%) conta quante soste
+      // future produrrebbe e sceglie quello che ne genera di meno.
+      // A parità di soste future, preferisce il target più basso (meno tempo in questa sosta).
+      //
+      // pctFine:     % batteria all'arrivo alla sosta
+      // kmDopoSosta: km ancora da percorrere dopo questa sosta
+      function scegliBestPct(pctFine, kmDopoSosta) {
+        const kwhAttuale   = state.battery * pctFine / 100;
+        const kwhNecTotale = kwhPerKm * kmDopoSosta + state.battery * state.socEnd / 100;
+
+        // pctMin: minimo indispensabile per poter ripartire, arrotondato al 5 superiore
+        const pctMinRaw = pctFine + (kwhNecTotale - kwhAttuale) / state.battery * 100;
+        const pctMin    = Math.min(state.socTarget, Math.max(pctFine + 5, Math.ceil(pctMinRaw / 5) * 5));
+
+        let bestPct      = pctMin;
+        let bestSosteFut = Infinity;
+
+        for (let candidato = pctMin; candidato <= state.socTarget; candidato += 5) {
+          // Quante soste future produce questo candidato?
+          const sosteFut = contaSosteFuture(candidato, kmDopoSosta, 10);
+
+          // Aggiorna il best solo se produce MENO soste.
+          // In caso di parità non aggiorniamo: candidato è più alto di bestPct
+          // (il loop sale), quindi bestPct rimane il minore → meno ricarica qui.
+          if (sosteFut < bestSosteFut) {
+            bestSosteFut = sosteFut;
+            bestPct      = candidato;
+          }
+        }
+
+        return Math.min(bestPct, state.socTarget);
+      }
+
+      // ── Caso semplice: nessuna sosta necessaria ──────────────────
+      // Verifica subito se il viaggio intero è percorribile senza fermarsi.
+      if (celaFa(state.socStart, state.km)) {
+        const pctFinale = pctArrivo(state.socStart, state.km);
+        return {
+          soste: 0, tappe: [], pctFinale,
+          kwhTotaleRicaricato: 0,
+          arrivoSottoSoglia: pctFinale < state.socEnd,
+        };
+      }
+
+      // ── Costruzione tappe in avanti ──────────────────────────────
+      const tappe          = [];
+      let kmRimanenti      = state.km;
+      let pctAttuale       = state.socStart;
+      let idx              = 0;
+      let kwhRicaricatoTot = 0;
+
+      // Guardia anti-loop infinito: non più tappe dei km totali / 10
+      const maxIterazioni = Math.ceil(state.km / 10) + 5;
+
+      while (kmRimanenti > 0 && idx < maxIterazioni) {
+
+        // ── CHECK 1: con la carica attuale finisco senza soste? ────
+        // Questo check era già presente nel vecchio codice, ma solo qui
+        // (non prima della push della sosta), causando il bug delle soste a 0 kWh.
+        if (celaFa(pctAttuale, kmRimanenti)) {
+          const kwhSeg = parseFloat((kwhPerKm * kmRimanenti).toFixed(2));
+          tappe.push({
+            idx,
+            kmSeg:    kmRimanenti,
+            kwhSeg,
+            pctInizio: Math.round(pctAttuale),
+            pctFine:   pctArrivo(pctAttuale, kmRimanenti),
+            isUltimo:  true,
+            maxKm:     kmMaxDaSoc(pctAttuale),
+          });
+          break; // viaggio completato
+        }
+
+        // ── Calcolo lunghezza del segmento corrente ────────────────
+        // maxKm: km fisicamente percorribili con la carica attuale fino a 0%
+        // (non tiene conto della soglia socEnd, è il limite fisico assoluto)
+        const maxKm = kmMaxDaSoc(pctAttuale);
+
+        // saved: valore impostato dall'utente tramite lo slider di questa tappa (se esiste)
+        const saved = state.kmPerTappa[idx];
+
+        // kmSeg: il minore tra valore salvato/default, massimo fisico e km rimanenti.
+        // Se l'utente ha spostato lo slider oltre il massimo fisico, si ignora il saved.
+        const kmSeg = Math.min(
+          (saved > 0 && saved <= maxKm) ? saved : kmDefaultTappa(pctAttuale),
+          maxKm,
+          kmRimanenti
+        );
+
+        // Protezione: se per qualche motivo kmSeg è 0 o negativo, usciamo
+        // per evitare un loop infinito (non dovrebbe mai accadere in condizioni normali).
+        if (kmSeg <= 0) break;
+
+        const kwhSeg      = parseFloat((kwhPerKm * kmSeg).toFixed(2));
+        const pctFine     = pctArrivo(pctAttuale, kmSeg);
+        const kmDopoSosta = kmRimanenti - kmSeg;
+
+        // ── CHECK 2: con la carica all'arrivo del segmento finisco senza ricaricare? ──
+        // QUESTO È IL CHECK MANCANTE nel vecchio codice.
+        // Se anche senza caricare un solo kWh arrivo a destinazione, questo
+        // segmento è l'ultimo: non serve sosta, non serve ricarica.
+        // Senza questo check il vecchio codice aggiungeva una "sosta" con kwhRicarica=0.
+        if (kmDopoSosta <= 0 || celaFa(pctFine, kmDopoSosta)) {
+          // kmDopoSosta <= 0 significa che questo segmento esaurisce esattamente il viaggio:
+          // nessun km residuo → nessuna sosta necessaria, si arriva qui.
+          tappe.push({
+            idx,
+            kmSeg,
+            kwhSeg,
+            pctInizio: Math.round(pctAttuale),
+            pctFine,
+            isUltimo:  true,
+            maxKm,
+          });
+          break; // viaggio completato
+        }
+
+        // ── Sosta necessaria: target di ricarica ottimizzato ─────
+        //
+        // Se l'utente NON ha modificato lo slider di questa tappa (saved è 0 o assente),
+        // usiamo scegliBestPct() per trovare il target che minimizza il tempo totale
+        // di ricarica considerando anche le soste future stimate (look-ahead).
+        //
+        // Se l'utente HA spostato lo slider (ha scelto manualmente dove fermarsi),
+        // rispettiamo la scelta e usiamo la logica classica "carica il minimo
+        // indispensabile per arrivare alla prossima sosta": l'utente sa già dove
+        // vuole fermarsi, non ha senso ottimizzare automaticamente.
+        const kwhAttuale   = state.battery * pctFine / 100;
+        const kwhMaxTarget = Math.max(0, state.battery * (state.socTarget - pctFine) / 100);
+
+        let pctRipartenza;
+        if (!saved || saved <= 0) {
+          // Nessuna modifica manuale: ottimizzazione look-ahead
+          pctRipartenza = scegliBestPct(pctFine, kmDopoSosta);
+        } else {
+          // Slider modificato manualmente: carica il minimo indispensabile
+          const kwhNecDopoSosta  = kwhPerKm * kmDopoSosta + state.battery * state.socEnd / 100;
+          const kwhRicaricaMin   = Math.max(0, kwhNecDopoSosta - kwhAttuale);
+          const kwhRicaricaClass = parseFloat(Math.min(kwhRicaricaMin, kwhMaxTarget).toFixed(2));
+          pctRipartenza = Math.min(
+            state.socTarget,
+            Math.round((kwhAttuale + kwhRicaricaClass) / state.battery * 100)
+          );
+        }
+
+        // kWh effettivamente aggiunti in questa sosta
+        const kwhRicarica = parseFloat(
+          Math.max(0, state.battery * (pctRipartenza - pctFine) / 100).toFixed(2)
+        );
+
+        // Tempo di ricarica in minuti (stima a potenza costante, nessuna curva di ricarica)
+        const minRicarica = Math.round(kwhRicarica / state.chargeKw * 60);
+
+        // Costo in euro
+        const eurRicarica = parseFloat((kwhRicarica * state.price).toFixed(2));
+
+        kwhRicaricatoTot += kwhRicarica;
+
+        tappe.push({
+          idx,
+          kmSeg,
+          kwhSeg,
+          pctInizio:    Math.round(pctAttuale),
+          pctFine,
+          isUltimo:     false,
+          kwhRicarica,
+          minRicarica,
+          eurRicarica,
+          pctRipartenza,
+          maxKm,
+        });
+
+        // Aggiorna stato per l'iterazione successiva
+        kmRimanenti -= kmSeg;
+        pctAttuale   = pctRipartenza;
+        idx++;
+      }
+
+      // pctFinale: % di batteria all'arrivo reale (ultima tappa aggiunta)
+      const pctFinale = tappe.length ? tappe[tappe.length - 1].pctFine : state.socEnd;
+
+      return {
+        soste:               tappe.filter(t => !t.isUltimo).length,
+        tappe,
+        pctFinale,
+        kwhTotaleRicaricato: kwhRicaricatoTot,
+        // true se arriviamo sotto la soglia di riserva impostata (warning in mappa)
+        arrivoSottoSoglia:   pctFinale < state.socEnd,
+      };
+    }
+
+    // ─── updateUI ────────────────────────────────────────────────
+    function updateUI() {
+      state.km       = parseFloat(slKm.value);
+      state.kwh100   = parseFloat(slKwh.value);
+      state.battery  = parseFloat(slBattery.value);
+      state.socStart  = parseFloat(slSocStart.value);
+      state.socTarget = parseFloat(slSocTarget.value);
+      state.socEnd    = parseFloat(slSocEnd.value);
+      state.chargeKw = parseFloat(slChargeKw.value);
+      state.price    = parseFloat(slPrice.value);
+
+      if (state.socEnd >= state.socStart) {
+        state.socEnd   = Math.max(0, state.socStart - 5);
+        slSocEnd.value = state.socEnd;
+      }
+      if (state.socTarget < state.socEnd + 10) {
+        state.socTarget   = Math.min(100, state.socEnd + 10);
+        slSocTarget.value = state.socTarget;
+      }
+
+      [slKm, slKwh, slBattery, slSocStart, slSocTarget, slSocEnd, slChargeKw, slPrice].forEach(VT.updateTrack);
+
+      // ── Displays ──
+      document.getElementById('km-display').textContent =
+        `${fmtInt.format(state.km)} km`;
+      document.getElementById('kwh-display').textContent =
+        `${fmtP1.format(state.kwh100)} ${t.unitKwhKm} | ${fmtP1.format(100 / state.kwh100)} ${t.unitKmKwh}`;
+      document.getElementById('battery-display').textContent =
+        `${fmtInt.format(state.battery)} kWh`;
+      document.getElementById('soc-start-display').textContent =
+        `${fmtInt.format(state.socStart)} %`;
+      document.getElementById('soc-target-display').textContent =
+        `${fmtInt.format(state.socTarget)} %`;
+      document.getElementById('soc-end-display').textContent =
+        `${fmtInt.format(state.socEnd)} %`;
+      document.getElementById('chargekw-display').textContent =
+        `${fmtInt.format(state.chargeKw)} kW`;
+      document.getElementById('price-display').textContent =
+        `${fmtP2.format(state.price)} €/kWh`;
+
+      // ── kWh necessari ──
+      const kwh = kwhNecessari();
+      document.getElementById('rb-kwh-value').textContent =
+        `${fmtP1.format(kwh)} kWh`;
+      document.getElementById('rb-kwh-note').textContent =
+        tT.rbKwhNote(fmtInt.format(state.km), fmtP1.format(state.kwh100));
+
+      // ── Stato veicolo ──
+      const statusBox = document.getElementById('rb-status-box');
+      if (state.optVeicolo) {
+        const sufficiente = kwhDisponibili() >= kwh;
+        statusBox.style.display = '';
+        const statusText = document.getElementById('rb-status-text');
+        if (sufficiente) {
+          statusBox.style.background = 'rgba(168,230,163,.07)';
+          statusBox.style.border     = '1px solid rgba(168,230,163,.25)';
+          statusText.style.color     = 'var(--cross)';
+          statusText.textContent     = tT.rbOk;
+        } else {
+          statusBox.style.background = 'rgba(248,113,113,.07)';
+          statusBox.style.border     = '1px solid rgba(248,113,113,.25)';
+          statusText.style.color     = '#f87171';
+          statusText.textContent     = tT.rbWarning;
+        }
+        document.getElementById('panel-soste-auto').style.display = sufficiente ? 'none' : '';
+      } else {
+        statusBox.style.display = 'none';
+        document.getElementById('panel-soste-auto').style.display = 'none';
+      }
+
+      // ── Costo ──
+      if (state.optCosto) {
+        const result          = state.optVeicolo ? calcolaTappe() : null;
+        const kwhDaRicaricare = result ? result.kwhTotaleRicaricato : kwh;
+        const costo           = kwhDaRicaricare * state.price;
+        document.getElementById('rb-cost-value').textContent =
+          `${fmtP2.format(costo)} €`;
+        document.getElementById('rb-cost-note').textContent =
+          `${fmtP1.format(kwhDaRicaricare)} kWh × ${fmtP2.format(state.price)} €/kWh`;
+      }
+
+      renderTripMap();
+    }
+
+    // ─── Render mappa ─────────────────────────────────────────────
+    function renderTripMap() {
+      const container = document.getElementById('trip-map-container');
+      const subtitle  = document.getElementById('map-subtitle');
+
+      if (!state.optVeicolo) {
+        subtitle.textContent = '';
+        container.innerHTML  = placeholder(tT.mapNoVeicolo);
+        return;
+      }
+
+      const result = calcolaTappe();
+      subtitle.textContent = tT.mapSubtitle(fmtInt.format(state.km), result.soste);
+
+      if (result.soste === 0) {
+        container.innerHTML = placeholder(tT.mapNessunaSosta);
+        return;
+      }
+
+      container.innerHTML = buildMap(result);
+
+      // Aggancia event listener agli slider generati dinamicamente
+      result.tappe.forEach((tappa) => {
+        const sl = document.getElementById(`sl-tappa-${tappa.idx}`);
+        if (!sl) return;
+        sl.addEventListener('input', () => {
+          state.kmPerTappa[tappa.idx] = parseFloat(sl.value);
+          VT.updateTrack(sl);
+          renderTripMap();
+          VT.saveState(STORAGE_KEY, state);
+        });
+      });
+    }
+
+    function placeholder(text) {
+      return `<div style="width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:48px 24px;min-height:200px;">
+        <span style="font-size:2.8rem;opacity:.18;">🗺️</span>
+        <div style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);line-height:1.8;text-align:center;white-space:pre-line;">${text}</div>
+      </div>`;
+    }
+
+    function buildMap(result) {
+      let html = `<div style="width:100%;padding:12px 20px 20px;display:flex;flex-direction:column;">`;
+      let sostaIdx = 0;
+      html += nodeHTML('start', tT.mapStart, state.socStart, null, false);
+      for (const tappa of result.tappe) {
+        html += segHTML(tappa);
+        if (tappa.isUltimo) {
+          html += nodeHTML('end', tT.mapArrivo, tappa.pctFine, null, result.arrivoSottoSoglia);
+        } else {
+          sostaIdx++;
+          html += nodeHTML('stop', tT.mapSosta(sostaIdx), tappa.pctFine, tappa, false);
+        }
+      }
+      html += summaryHTML(result);
+      html += `</div>`;
+      return html;
+    }
+
+    // ── Riepilogo finale sotto il nodo arrivo ────────────────────
+    function summaryHTML(result) {
+      // kWh consumati = somma di tutti i segmenti
+      const kwhConsumo  = result.tappe.reduce((acc, t) => acc + t.kwhSeg, 0);
+      // kWh ricaricati = già calcolato in calcolaTappe
+      const kwhRicarica = result.kwhTotaleRicaricato;
+      // Minuti totali di ricarica = somma delle soste (isUltimo non ha minRicarica)
+      const minTot      = result.tappe.reduce((acc, t) => acc + (t.minRicarica ?? 0), 0);
+      // Costo totale = somma eurRicarica di ogni sosta
+      const eurTot      = result.tappe.reduce((acc, t) => acc + (t.eurRicarica ?? 0), 0);
+
+      // Formatta i minuti come "Xh Ym" se >= 60, altrimenti "Ym"
+      const minLabel = minTot >= 60
+        ? `${Math.floor(minTot / 60)}h ${minTot % 60}min`
+        : `${minTot} min`;
+
+      // La riga del costo è visibile solo se l'accordion costo è attivo
+      const costoRow = state.optCosto ? `
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="color:var(--fuel);">${tT.mapTotCosto}</span>
+          <span style="color:var(--fuel);font-weight:600;">${fmtP2.format(eurTot)} €</span>
+        </div>` : '';
+
+      return `
+        <div style="margin-top:20px;padding:12px 16px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;">
+            ${tT.mapRiepilogo}
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:.75rem;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="color:var(--muted);">${tT.mapTotEnergia}</span>
+              <span style="color:var(--elec);font-weight:600;">${fmtP1.format(kwhConsumo)} kWh</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="color:var(--muted);">${tT.mapTotEnergiaCar}</span>
+              <span style="color:var(--elec);font-weight:600;">${fmtP1.format(kwhRicarica)} kWh</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="color:var(--muted);">${tT.mapTotTempo}</span>
+              <span style="color:var(--muted);font-weight:600;">${minLabel}</span>
+            </div>
+            ${costoRow}
+          </div>
+        </div>`;
+    }
+
+    // ── Nodo ─────────────────────────────────────────────────────
+    function nodeHTML(type, label, pct, tappa, warning) {
+      const icons    = { start: '🟢', stop: '⚡', end: warning ? '⚠️' : '🏁' };
+      const icon     = icons[type];
+      const pctRound = Math.round(pct);
+      const pctColor = (warning || pctRound <= 15) ? '#f87171' : pctRound <= 35 ? 'var(--fuel)' : 'var(--cross)';
+      const isLast   = type === 'end';
+
+      let warningNote = '';
+      if (warning && isLast) {
+        warningNote = `
+          <div style="margin-top:6px;padding:8px 12px;background:rgba(248,113,113,.07);border-radius:8px;border:1px solid rgba(248,113,113,.3);">
+            <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:#f87171;">
+              ${tT.mapWarningArr(pctRound, state.socEnd)}
+            </span>
+          </div>`;
+      }
+
+      let details = '';
+      if (tappa) {
+        const ricaricaStr = state.optCosto
+          ? tT.mapRicaricaEur(fmtP1.format(tappa.kwhRicarica), fmtP2.format(tappa.eurRicarica))
+          : tT.mapRicarica(fmtP1.format(tappa.kwhRicarica));
+        details = `
+          <div style="margin-top:6px;padding:10px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+              <span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--elec);font-weight:600;">${ricaricaStr}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);">🕐 ${tT.mapTempo(tappa.minRicarica)}</span>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--cross);">${tT.mapPartPct(tappa.pctRipartenza)}</div>
+          </div>`;
+      }
+
+      return `
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:2px;">
+            <div style="font-size:1.3rem;line-height:1;">${icon}</div>
+            ${!isLast ? `<div style="width:2px;flex:1;min-height:12px;background:var(--border);margin-top:4px;"></div>` : ''}
+          </div>
+          <div style="flex:1;padding-bottom:${isLast ? '4px' : '0'};">
+            <div style="display:flex;align-items:baseline;gap:10px;padding-top:2px;">
+              <span style="font-size:.95rem;font-weight:700;">${label}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.82rem;color:${pctColor};font-weight:700;">${pctRound}%</span>
+            </div>
+            ${details}
+            ${warningNote}
+          </div>
+        </div>`;
+    }
+
+    // ── Segmento con slider km per tappa ─────────────────────────
+    function segHTML(tappa) {
+      const pctUsata   = Math.round(tappa.kwhSeg / state.battery * 100);
+      const slId       = `sl-tappa-${tappa.idx}`;
+      const currentKm  = tappa.kmSeg;
+      const maxKm      = tappa.maxKm;
+      const minKm      = Math.min(10, maxKm);
+      const pctFill    = Math.round((currentKm - minKm) / Math.max(1, maxKm - minKm) * 100);
+      const pctArrSeg  = tappa.pctFine;
+      const arrivoRischioso = !tappa.isUltimo && pctArrSeg <= 10;
+      const arrivoWarning   = !tappa.isUltimo && pctArrSeg <= 0;
+
+      // Colore % arrivo sulla tappa
+      const pctArrColor = arrivoWarning ? '#f87171'
+                        : arrivoRischioso ? 'var(--fuel)'
+                        : 'var(--muted)';
+
+      // Warning testuale sotto lo slider
+      const warningNote = arrivoWarning
+        ? `<div style="font-family:'DM Mono',monospace;font-size:.62rem;color:#f87171;margin-top:2px;">
+             ⚠️ ${tT.mapCriticalSosta}
+           </div>`
+        : arrivoRischioso
+        ? `<div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--fuel);margin-top:2px;">
+             ⚠️ ${tT.mapWarningSosta}
+           </div>`
+        : '';
+
+      // Slider solo sui segmenti con sosta (non sull'ultimo)
+      const sliderHTML = !tappa.isUltimo ? `
+        <div class="slider-item" style="margin:2px 0 0;">
+          <input type="range" class="neutral" id="${slId}"
+            min="${minKm}" max="${maxKm}" step="10" value="${currentKm}"
+            style="--pct:${pctFill}%">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px;">
+          <span style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);">
+          </span>
+          <span style="font-family:'DM Mono',monospace;font-size:.62rem;color:${pctArrColor};">
+              max ${fmtInt.format(maxKm)} km
+          </span>
+        </div>
+        ${warningNote}` : '';
+
+      return `
+        <div style="display:flex;gap:16px;align-items:stretch;">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:26px;">
+            <div style="width:2px;flex:1;background:linear-gradient(to bottom,var(--border),rgba(79,195,247,.4),var(--border));min-height:50px;"></div>
+          </div>
+          <div style="flex:1;padding:8px 0 4px;display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <span style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--text);font-weight:600;">${fmtInt.format(currentKm)} km</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--elec);">−${fmtP1.format(tappa.kwhSeg)} kWh</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">−${pctUsata}%</span>
+            </div>
+            ${sliderHTML}
+          </div>
+        </div>`;
+    }
+
+    // ─── Preset handler ───────────────────────────────────────────
+    window.applyPresetHandler = (field, value) => {
+      if (field === 'battery')  { state.battery  = value; slBattery.value  = Math.max(20,  Math.min(120, value)); }
+      if (field === 'kwh')      { state.kwh100   = value; slKwh.value      = Math.max(8,   Math.min(35,  value)); }
+      if (field === 'kw')       { state.chargeKw = value; slChargeKw.value = Math.max(11,  Math.min(350, value)); }
+      updateUI(); VT.saveState(STORAGE_KEY, state);
+    };
+
+    document.getElementById('pc-bat-30').onclick  = () => applyPreset('battery', 30);
+    document.getElementById('pc-bat-50').onclick  = () => applyPreset('battery', 50);
+    document.getElementById('pc-bat-77').onclick  = () => applyPreset('battery', 77);
+    document.getElementById('pc-bat-100').onclick = () => applyPreset('battery', 100);
+    document.getElementById('pc-kwh-city').onclick  = () => applyPreset('kwh', 12);
+    document.getElementById('pc-kwh-extra').onclick = () => applyPreset('kwh', 16);
+    document.getElementById('pc-kwh-auto').onclick  = () => applyPreset('kwh', 20);
+    document.getElementById('pc-kw-11').onclick  = () => applyPreset('kw', 11);
+    document.getElementById('pc-kw-22').onclick  = () => applyPreset('kw', 22);
+    document.getElementById('pc-kw-50').onclick  = () => applyPreset('kw', 50);
+    document.getElementById('pc-kw-150').onclick = () => applyPreset('kw', 150);
+
+    // ─── Modal config ─────────────────────────────────────────────
+    VT.setModalConfig({
+      km: {
+        title: tT.modalTitleKm, desc: tT.modalDescKm,
+        min: 1, max: 10000, step: 10,
+        getValue: () => state.km,
+        onConfirm: (val) => { state.km = val; slKm.value = Math.max(50, Math.min(1000, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      kwh: {
+        title: tT.modalTitleKwh, desc: tT.modalDescKwh,
+        min: 1, max: 200, step: 0.1,
+        getValue: () => state.kwh100,
+        onConfirm: (val) => { state.kwh100 = val; slKwh.value = Math.max(8, Math.min(35, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      battery: {
+        title: tT.modalTitleBattery, desc: tT.modalDescBattery,
+        min: 5, max: 300, step: 1,
+        getValue: () => state.battery,
+        onConfirm: (val) => { state.battery = val; slBattery.value = Math.max(20, Math.min(120, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      socStart: {
+        title: tT.modalTitleSocStart, desc: tT.modalDescSocStart,
+        min: 1, max: 100, step: 1,
+        getValue: () => state.socStart,
+        onConfirm: (val) => { state.socStart = val; slSocStart.value = Math.max(10, Math.min(100, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      socTarget: {
+        title: tT.modalTitleSocTarget, desc: tT.modalDescSocTarget,
+        min: 50, max: 100, step: 1,
+        getValue: () => state.socTarget,
+        onConfirm: (val) => { state.socTarget = val; slSocTarget.value = Math.max(50, Math.min(100, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      socEnd: {
+        title: tT.modalTitleSocEnd, desc: tT.modalDescSocEnd,
+        min: 0, max: 50, step: 1,
+        getValue: () => state.socEnd,
+        onConfirm: (val) => { state.socEnd = val; slSocEnd.value = Math.max(0, Math.min(50, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      chargeKw: {
+        title: tT.modalTitleChargeKw, desc: tT.modalDescChargeKw,
+        min: 1, max: 500, step: 1,
+        getValue: () => state.chargeKw,
+        onConfirm: (val) => { state.chargeKw = val; slChargeKw.value = Math.max(11, Math.min(350, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+      price: {
+        title: tT.modalTitlePrice, desc: tT.modalDescPrice,
+        min: 0.01, max: 5, step: 0.01,
+        getValue: () => state.price,
+        onConfirm: (val) => { state.price = val; slPrice.value = Math.max(0.10, Math.min(0.80, val)); updateUI(); VT.saveState(STORAGE_KEY, state); }
+      },
+    });
+
+    // ─── Event listeners ──────────────────────────────────────────
+    [slKm, slKwh, slBattery, slSocStart, slSocTarget, slSocEnd, slChargeKw, slPrice].forEach(sl => {
+      sl.addEventListener('input', updateUI);
+      sl.addEventListener('change', () => VT.saveState(STORAGE_KEY, state));
+    });
+
+    // ─── Init ────────────────────────────────────────────────────
+    if (!Array.isArray(state.kmPerTappa)) state.kmPerTappa = [];
+
+    slKm.value        = Math.max(50,   Math.min(1000, state.km));
+    slKwh.value       = Math.max(8,    Math.min(35,   state.kwh100));
+    slBattery.value   = Math.max(20,   Math.min(120,  state.battery));
+    slSocStart.value  = Math.max(10,   Math.min(100,  state.socStart));
+    slSocTarget.value = Math.max(50,   Math.min(100,  state.socTarget ?? 80));
+    slSocEnd.value    = Math.max(0,    Math.min(50,   state.socEnd));
+    slChargeKw.value  = Math.max(11,   Math.min(350,  state.chargeKw));
+    slPrice.value     = Math.max(0.10, Math.min(0.80, state.price));
+
+    VT.applyAccordion('veicolo', state.optVeicolo);
+    VT.applyAccordion('costo',   state.optCosto);
+
+    updateUI();
+
+  </script>
+</body>
+</html>

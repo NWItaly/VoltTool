@@ -13,7 +13,8 @@
     { key: 'navBreakeven', href: 'breakeven.html', match: /breakeven\.html$/ },
     { key: 'navCharging', href: 'charging.html', match: /charging\.html$/ },
     { key: 'navRange', href: 'range.html', match: /range\.html$/ },
-    { key: 'navBattery', href: 'battery.html', match: /battery\.html$/ },
+    { key: 'navBattery', href: 'battery.html', match: /battery.html$/ },
+    { key: 'navTrip', href: 'trip.html', match: /trip.html$/ },
     { key: 'navPrivacy', href: 'privacy.html', match: /privacy\.html$/ },
   ];
 
@@ -59,7 +60,7 @@
   document.body.insertAdjacentHTML('afterbegin', navHTML);
 
   /* ── 5. Hamburger toggle ────────────────────────────────────── */
-  const btn    = document.getElementById('nav-hamburger');
+  const btn = document.getElementById('nav-hamburger');
   const drawer = document.getElementById('nav-drawer');
 
   btn.addEventListener('click', () => {
@@ -88,7 +89,7 @@
 
   /* ── 7. Share button ────────────────────────────────────────── */
   const shareBtn = document.getElementById('nav-share');
-  const toast    = document.getElementById('nav-share-toast');
+  const toast = document.getElementById('nav-share-toast');
   let toastTimer = null;
 
   function showToast(msg) {
@@ -99,7 +100,7 @@
   }
 
   shareBtn.addEventListener('click', async () => {
-    const url   = window.location.href;
+    const url = window.location.href;
     const title = document.title || 'VoltTool';
 
     // Web Share API — mobile / Safari desktop

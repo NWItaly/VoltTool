@@ -60,6 +60,15 @@ Data la capienza della batteria, calcola quanti km si possono percorrere.
 - Funzionalità aggiuntive:
   - Carica attuale e riserva → non sempre la batteria è sempre al 100% e la si vuole utilizzare interamente
 
+### `trip.html` — Viaggio EV
+Simulazione delle soste necessarie per un viaggio.
+- Con distanza e consumo medio calcola quanti kwh sono necessari per l'intero viaggio.
+- Funzionalità aggiuntive:
+  - Stato veicolo (capienza batteria, % di carica alla partenza ed all'arrivo e velocità di ricarica)
+  - Costo ricaria
+
+
+
 ---
 
 ## Struttura del progetto
