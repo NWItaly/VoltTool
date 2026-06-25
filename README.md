@@ -112,6 +112,7 @@ Entrambe caricate via CDN, nessun `npm install`.
 ## Sviluppo futuro
 
 Altre funzionalità in programma, ognuna su pagina dedicata per mantenere il codice leggero e indipendente.
+- aggiungere il calcolo del punto di pareggio dei consumi
 
 ## Disclaimer
 
